@@ -85,6 +85,8 @@
 
 **工厂方法**是一种创建型设计模式，其在父类中提供一个创建对象的方法，允许子类决定实例化对象的类型。
 
+> 如需要制作古典音乐和流行音乐，但是希望创造出来的音乐是属于同一种类的，那么如何来做呢？
+
 ```mermaid
 classDiagram
 direction BT
@@ -190,7 +192,7 @@ public class MainApp {
 *亦称：Abstract Factory*
 **抽象工厂**是一种创建型设计模式，它能创建一**系列**相关的对象，而无需指定其具体类。
 
-如需要生产下面4种产品，按照**工厂模式**需要4个不同的工厂，而使用**抽象工厂**，则可以根据品牌进行生产。
+> 如需要生产下面4种产品，按照**工厂模式**需要4个不同的工厂，而使用**抽象工厂**，则可以根据品牌进行生产。
 
 | 品牌  | 电视   | 冰箱   |
 |-----|------|------|
@@ -357,3 +359,147 @@ public class MainApp {
 *亦称：建造者模式、Builder*
 
 **生成器**是一种创建型设计模式，使你能够分步骤创建复杂对象。该模式允许你使用相同的创建代码生成不同类型和形式的对象。
+
+> 如需要生产一辆汽车🚗，汽车有各种各样的配件(名称、引擎、座位数、是否是敞篷等等)，如果我们采用构造函数来生成对象，需要利用**overload**写各种各样类型的构造函数，利用**生成器**模式可以实现分步骤装配。
+
+步骤1：创建一个汽车实体类
+
+```java
+public class Car {
+    private final String name;
+    private final int seats;
+    private final String engine;
+    private final boolean sunroof;
+
+    public Car() {
+        this.name = "Default Name";
+        this.seats = 4;
+        this.engine = "Default Engine";
+        this.sunroof = false;
+    }
+
+    public Car(String name, int seats, String engine, boolean sunroof) {
+        this.name = name;
+        this.seats = seats;
+        this.engine = engine;
+        this.sunroof = sunroof;
+    }
+    // getters has been omitted.
+}
+```
+
+步骤2：根据汽车的配置创建生成器接口
+
+```java
+public interface Builder {
+	 
+    void reset();
+    Builder setName(String name);
+    Builder setSeats(int quantity);
+    Builder setEngine(String name);
+    Builder setSunroof(boolean install);
+}
+```
+
+步骤3：创建实现生成器接口的汽车实体类
+
+```java
+public class CarBuilder implements Builder {
+    private String name;
+    private int seats;
+    private String engine;
+    private boolean sunroof;
+
+    public Car getProduct() {
+        Car car = new Car(this.name, this.seats, this.engine, this.sunroof);
+        this.reset();
+        return car;
+    }
+
+    @Override
+    public void reset() {
+        Car car = new Car();
+        this.name = car.getName();
+        this.seats = car.getSeats();
+        this.engine = car.getEngine();
+        this.sunroof = car.isSunroof();
+    }
+
+    @Override
+    public Builder setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    @Override
+    public Builder setSeats(int seats) {
+        this.seats = seats;
+        return this;
+    }
+
+    @Override
+    public Builder setEngine(String engine) {
+        this.engine = engine;
+        return this;
+    }
+
+    @Override
+    public Builder setSunroof(boolean sunroof) {
+        this.sunroof = sunroof;
+        return this;
+    }
+
+}
+```
+
+步骤4：创建一个主管类(可选)，用来指挥生成器工作
+
+```java
+public class Director {
+
+    public void constructSportsCar(Builder builder) {
+        builder.setName("Sports Car")
+                .setSeats(2)
+                .setEngine("Engine A")
+                .setSunroof(true);
+    }
+
+    public void constructCar(Builder builder) {
+        builder.setName("Car")
+                .setSeats(4)
+                .setEngine("Common Engine")
+                .setSunroof(false);
+    }
+}
+```
+
+步骤5：通过主管和生成器类实现制造和自定义汽车🚗
+
+```java
+public class MainApp {
+    public static void main(String[] args) {
+        Director director = new Director();
+        CarBuilder carBuilder = new CarBuilder();
+
+        director.constructSportsCar(carBuilder);
+        Car car = carBuilder.getProduct();
+        System.out.println(car);
+
+        director.constructCar(carBuilder);
+        car = carBuilder.getProduct();
+        System.out.println(car);
+
+        carBuilder.setName("Ruobing").setSunroof(true).setSeats(8);
+        car = carBuilder.getProduct();
+        System.out.println(car);
+    }
+}
+```
+
+## 原型
+
+*亦称：克隆、Clone、Prototype*
+
+**原型**是一种创建型设计模式，使你能够复制已有对象，而又无需使代码依赖它们所属的类。
+
+> 如需要
