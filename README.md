@@ -79,6 +79,8 @@
 
 *创建型模式提供了创建对象的机制， 能够提升已有代码的灵活性和可复用性。*
 
+
+
 ## 工厂方法
 
 *亦称：虚拟构造函数、Virtual Constructor、Factory Method*
@@ -354,6 +356,8 @@ public class MainApp {
 }
 ```
 
+
+
 ## 生成器
 
 *亦称：建造者模式、Builder*
@@ -522,6 +526,8 @@ public class MainApp {
 }
 ```
 
+
+
 ## 原型
 
 *亦称：克隆、Clone、Prototype*
@@ -666,6 +672,8 @@ public class MainApp {
 }
 ```
 
+
+
 ## 单例
 
 *亦称：单件模式、Singleton*
@@ -727,6 +735,8 @@ public final class Singleton {
 
 步骤2：使用单例
 
+> 注意两个instance的地址是相同的，说明他们是同一个instance，也就是**单例**
+
 ```java
 public class MainApp {
     public static void main(String[] args) {
@@ -745,4 +755,118 @@ public class MainApp {
 
 # 结构型模式
 
-*结构型模式介绍如何将对象和类组装成较大的结构，并同时保持结构的灵活和高效*
+*结构型模式介绍如何将对象和类组装成较大的结构，并同时保持结构的灵活和高效。*
+
+
+
+## 适配器
+
+*亦称：封装器模式、Wrapper、Adapter*
+
+**适配器**是一种结构型设计模式，它能使接口不兼容的对象能够相互合作。
+
+> 如果你去到美国，但是你的手机却需要220V的电压充电，那么不错的方法就是适配美国110V的电压
+
+```mermaid
+classDiagram
+direction BT
+class ChinaStandard {
+  + charge(Device) void
+}
+class Device {
+  + getVoltage() int
+}
+class VoltageAdapter {
+  + getVoltage() int
+}
+class AmericanStandard {
+  + charge(Device) void
+}
+VoltageAdapter  -->  Device 
+VoltageAdapter *--> Device 
+
+```
+步骤1：创建中国和美国的电压标准实体类
+
+```java
+public class ChinaStandard {
+    private final static int VOLTAGE = 220;
+
+    public static void charge(Device device) {
+        if (VOLTAGE >= device.getVoltage()) {
+            System.out.println("charging...");
+        } else {
+            System.out.println(VOLTAGE + "V and " + device.getVoltage() + "V are incompatible!");
+        }
+    }
+}
+
+public class AmericanStandard {
+    private final static int VOLTAGE = 110;
+
+    public static void charge(Device device) {
+        if (VOLTAGE >= device.getVoltage()) {
+            System.out.println("charging...");
+        } else {
+            System.out.println(VOLTAGE + "V and " + device.getVoltage() + "V are incompatible!");
+        }
+    }
+}
+```
+
+步骤2：创建一台中国制造的设备(充电电压220V)
+
+```java
+public class Device {
+    private final static int VOLTAGE = 220;
+
+    public int getVoltage() {
+        return VOLTAGE;
+    }
+}
+```
+
+步骤3：创建一个电压适配器用于适应美国标准的电压
+
+> 需要继承于设备，通常使用一个设备的实例作为成员变量
+
+```java
+public class VoltageAdapter extends Device {
+    private final Device device;
+
+    public VoltageAdapter(Device device) {
+        this.device = device;
+    }
+
+    @Override
+    public int getVoltage() {
+        return this.device.getVoltage() / 2;
+    }
+}
+```
+
+步骤4：中国设备成功在美国充上电
+
+```java
+public class MainApp {
+    public static void main(String[] args) {
+        Device device = new Device();
+        ChinaStandard.charge(device);
+        AmericanStandard.charge(device);
+
+        VoltageAdapter adapter = new VoltageAdapter(device);
+        ChinaStandard.charge(adapter);
+        AmericanStandard.charge(adapter);
+    }
+}
+```
+
+
+
+## 桥接
+
+*亦称：Bridge*
+
+**桥接**是一种结构型设计模式，可将一个大类或一系列紧密相关的类拆分为抽象和实现两个独立的层次结构，从而能在开发时分别使用。
+
+> 如果你
