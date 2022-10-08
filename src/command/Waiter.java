@@ -7,16 +7,16 @@ import java.util.List;
  * @author Ruobing Shang 2022-10-07 19:43
  */
 public class Waiter {
-    private final List<Order> orders = new ArrayList<>();
+    private final List<CookCommand> cookCommands = new ArrayList<>();
 
     public void addOrder(Order order) {
-        orders.add(order);
+        cookCommands.add(new CookCommand(order));
     }
 
     public void processOrders() {
-        for (Order order : orders) {
+        for (CookCommand cookCommand:cookCommands) {
             System.out.println("Order processing begins");
-            new CookCommand(order).execute();
+            cookCommand.execute();
             System.out.println("Order processing finished");
         }
     }
