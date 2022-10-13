@@ -10,11 +10,11 @@ public class OutBoundState extends State {
 
     @Override
     public void payment() {
-        System.out.println("has already payment");
+        System.out.println("Has already payment");
     }
 
     @Override
     public void outbound() {
-        System.out.println("has already outbound");
+        System.out.println("Has already outbound");
     }
 }
