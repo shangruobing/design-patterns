@@ -1834,7 +1834,7 @@ Waiter  ..>  CookCommand : «create»
 Waiter "1" *--> "*" Order 
 ```
 
-步骤1：创建一个厨师类用于烹饪事物(Receiver)
+步骤1：创建一个厨师类用于烹饪食物(Receiver)
 
 ```java
 public class Chef {
