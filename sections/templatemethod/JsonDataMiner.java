@@ -1,4 +1,4 @@
-package templatemathod;
+package templatemethod;
 
 /**
  * @author Ruobing Shang 2022-10-14 15:52

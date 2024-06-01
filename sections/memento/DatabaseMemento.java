@@ -1,4 +1,4 @@
-package memonto;
+package memento;
 
 import java.time.LocalDateTime;
 
